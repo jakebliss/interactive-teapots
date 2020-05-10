@@ -8,6 +8,9 @@
     <title>8th Wall Web: Flyer</title>
 
     <script src="//cdn.8thwall.com/web/aframe/8frame-0.9.0.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@3.0.3/dist/aframe-event-set-component.min.js"></script>
+    <script src="cursor-listener.js"></script>
+    <script src="cursor-placement.js"></script>
 
     <!-- XR Extras - provides utilities like load screen, almost there, and error handling.
            See github.com/8thwall/web/xrextras -->
@@ -22,7 +25,7 @@
 
 <a-scene
        xrweb="disableWorldTracking: true"
-        xrextras-gesture-detector
+        gesture-detector
         xrextras-almost-there
         xrextras-loading
         xrextras-runtime-error>
@@ -30,82 +33,77 @@
     <a-assets>
         <!-- Credit to Poly by Google for the model: https://poly.google.com/view/dA5osnS0Rzj -->
         <a-asset-item id="teapot-glb" src="assets/jellyfish-model.glb"></a-asset-item>
-        <img id="jelly-thumb" src="targets/video-target.jpg">
-        <video
-                id="jelly-video"
-                autoplay
-                muted
-                crossorigin="anonymous"
-                loop="true"
-                src="assets/jellyfish-video.mp4">
-        </video>
     </a-assets>
 
     <a-camera
+            id="camera"
             position="0 0 0"
             raycaster="objects: .cantap"
-            cursor="fuse: false; rayOrigin: mouse;"
-            geometry="primitive: sphere"
-            material="color: red; shader: flat">
+            cursor="id: 'cur'; fuse: true; fuseTimeout: 1500; rayOrigin: mouse;">
     </a-camera>
+
+
 
 
     <a-light type="directional" intensity="0.5" position="1 1 1"></a-light>
 
     <a-light type="ambient" intensity="1"></a-light>
 
-<!--    <a-entity camera look-controls>-->
-<!--        <a-entity cursor="fuse: true; fuseTimeout: 500"-->
-<!--                  position="0 0"-->
-<!--                  geometry="primitive: sphere"-->
-<!--                  material="color: red; shader: flat">-->
-<!--&lt;!&ndash;                  scale=".1 .1 .1"&ndash;&gt;-->
-
-<!--        </a-entity>-->
-<!--    </a-entity>-->
-
-<!--    <a-sphere-->
-<!--            position="-1.175 1.25 -5.2"-->
-<!--            radius="1.25"-->
-<!--            material="roughness: 0.8; metalness: 0.2; color: #DD0065;"-->
-<!--            shadow>-->
-<!--    </a-sphere>-->
 
     <!-- Note: "name:" must be set to the name of the image target uploaded to the 8th Wall Console -->
-    <a-entity
-            xrextras-named-image-target="name: video-target"
-            xrextras-play-video="video: #jelly-video; thumb: #jelly-thumb; canstop: true"
-            geometry="primitive: plane; height: 1; width: 0.79;">
-    </a-entity>
+    <a-entity xrextras-named-image-target="name: teapot-target"
+              cursor-placement>
+        <a-plane
+                id="marker"
+                class="cantap"
+                color="tomato"
+                height=".75"
+                width="1"
+                position="0 0"
+                visible="false">
+        </a-plane>
 
-    <!-- Note: "name:" must be set to the name of the image target uploaded to the 8th Wall Console -->
-    <a-entity xrextras-named-image-target="name: teapot-target">
+
         <!-- Add a child entity that can be rotated independently of the image target. -->
-        <a-entity xrextras-one-finger-rotate gltf-model="#teapot-glb"
+
+        <a-entity gltf-model="#teapot-glb"
+                  class="cantap"
                   geometry="primitive: box"
+                  id="jellyfish1"
                   rotation="0 0 90"
-                scale=".1 .1 .1"
+                  scale=".1 .1 .1"
                   position="-.4 -.3"></a-entity>
-        <a-entity xrextras-one-finger-rotate gltf-model="#teapot-glb"
+        <a-entity gltf-model="#teapot-glb"
+                  id="jellyfish2"
+                  class="cantap"
                   geometry="primitive: box"
                   rotation="0 0 90"
                   scale=".1 .1 .1"
                   position="-.15 -.3"></a-entity>
-        <a-entity xrextras-one-finger-rotate gltf-model="#teapot-glb"
+        <a-entity gltf-model="#teapot-glb"
+                  id="jellyfish3"
+                  class="cantap"
                   geometry="primitive: box"
                   rotation="0 0 90"
                   scale=".1 .1 .1"
                   position=".15 -.3"></a-entity>
-        <a-entity xrextras-one-finger-rotate gltf-model="#teapot-glb"
+        <a-entity gltf-model="#teapot-glb"
+                  id="jellyfish4"
+                  class="cantap"
                   geometry="primitive: box"
                   rotation="0 0 90"
                   scale=".1 .1 .1"
                     position=".4 -.3"></a-entity>
-<!--                  "-->
     </a-entity>
 
-
-
+    <a-entity
+            id="pickedUpJelly"
+            gltf-model="#teapot-glb"
+            class="cantap"
+            geometry="primitive: box"
+            rotation="0 -90 90"
+            scale="1 1 1"
+            visible="false"></a-entity>
 </a-scene>
 
 </body>
